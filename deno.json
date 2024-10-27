@@ -1,7 +1,10 @@
 {
   "name": "@fahchen/remix-deno-server-runtime",
   "version": "0.2.0",
-  "exports": "./mod.ts",
+  "exports": {
+    ".": "./mod.ts",
+    "./sessions/denoKVStorage": "./lib/implementations/sessions/denoKVStorage.ts"
+  },
   "tasks": {
     "lint": "deno fmt --check && deno lint && deno check **/*.ts"
   },

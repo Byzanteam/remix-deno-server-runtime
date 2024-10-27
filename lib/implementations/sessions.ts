@@ -16,5 +16,3 @@ export const createCookieSessionStorage = createCookieSessionStorageFactory(
 export const createMemorySessionStorage = createMemorySessionStorageFactory(
   createSessionStorage,
 );
-
-export { createDenoKVSessionStorage as unstable_createDenoKVSessionStorage } from "./sessions/denoKVStorage.ts";
