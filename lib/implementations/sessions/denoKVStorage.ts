@@ -33,7 +33,7 @@ interface DenoKVSessionStorageOptions<Data> {
  * The advantage of using this instead of cookie session storage is that
  * files may contain much more data than cookies.
  */
-export function createDenoKVSessionStorage<
+function createDenoKVSessionStorage<
   Data = SessionData,
   FlashData = Data,
 >({
@@ -103,3 +103,5 @@ export function createDenoKVSessionStorage<
     },
   });
 }
+
+export { createDenoKVSessionStorage as unstable_createDenoKVSessionStorage };
