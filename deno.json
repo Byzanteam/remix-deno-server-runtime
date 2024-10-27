@@ -1,6 +1,6 @@
 {
   "name": "@fahchen/remix-deno-server-runtime",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "exports": "./mod.ts",
   "tasks": {
     "lint": "deno fmt --check && deno lint && deno check **/*.ts"
