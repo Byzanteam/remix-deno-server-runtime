@@ -5,6 +5,11 @@
     ".": "./mod.ts",
     "./sessions/denoKVStorage": "./lib/implementations/sessions/denoKVStorage.ts"
   },
+  "publish": {
+    "exclude": [
+      ".github"
+    ]
+  },
   "tasks": {
     "lint": "deno fmt --check && deno lint && deno check **/*.ts"
   },
