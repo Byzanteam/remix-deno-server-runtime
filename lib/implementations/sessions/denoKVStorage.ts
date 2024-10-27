@@ -7,7 +7,7 @@ import type {
 
 import { createSessionStorage } from "../sessions.ts";
 
-interface DenoKVSessionStorageOptions<Data> {
+export interface DenoKVSessionStorageOptions<Data> {
   /**
    * The Cookie used to store the session id on the client, or options used
    * to automatically create one.
@@ -33,17 +33,12 @@ interface DenoKVSessionStorageOptions<Data> {
  * The advantage of using this instead of cookie session storage is that
  * files may contain much more data than cookies.
  */
-function createDenoKVSessionStorage<
-  Data = SessionData,
-  FlashData = Data,
->({
-  cookie,
-  path,
-  idGenerator,
-}: DenoKVSessionStorageOptions<
-  RemixFlashSessionData<Data, FlashData>
->): SessionStorage<Data, FlashData> {
+function createDenoKVSessionStorage<Data = SessionData, FlashData = Data>(
+  options: DenoKVSessionStorageOptions<RemixFlashSessionData<Data, FlashData>>,
+): SessionStorage<Data, FlashData> {
   type FlashSessionData = RemixFlashSessionData<Data, FlashData>;
+
+  const { cookie, path, idGenerator } = options;
 
   async function getDb(): Promise<Deno.Kv> {
     if (path) {
