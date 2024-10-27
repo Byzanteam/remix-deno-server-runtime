@@ -101,11 +101,13 @@ export async function serveStaticFiles(
     return new Response(file, { headers });
   } catch (error) {
     if (
+      (error as { code?: string }).code === "EISDIR" ||
       error instanceof Deno.errors.IsADirectory ||
       error instanceof Deno.errors.NotFound
     ) {
       throw new FileNotFoundError(filePath);
     }
+
     throw error;
   }
 }
