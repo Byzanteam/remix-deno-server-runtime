@@ -1,17 +1,22 @@
 # Remix Server Runtime for Deno
 
-This package implements the "Remix server runtime interface" that Remix runtime packages must conform to.
+This package implements the "Remix server runtime interface" that Remix runtime
+packages must conform to.
 
-> The most of the code is taken from the official package [@remix-run/deno](https://github.com/remix-run/remix/tree/main/packages/remix-deno), and I do not take credit for the original code.
+> The most of the code is taken from the official package
+> [@remix-run/deno](https://github.com/remix-run/remix/tree/main/packages/remix-deno),
+> and I do not take credit for the original code.
 
 ## Usage
 
 Install the package:
+
 ```
 deno install jsr:@fahchen/remix-deno-server-runtime
 ```
 
 Build your Deno server:
+
 ```typescript
 import { type ServerBuild } from "@remix-run/server-runtime";
 import { createRequestHandlerWithStaticFiles } from "@fahchen/remix-deno-server-runtime";
@@ -34,6 +39,7 @@ export default {
 ```
 
 Run the server:
+
 ```bash
 deno serve -A server.ts
 ```
