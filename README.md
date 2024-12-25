@@ -1,6 +1,6 @@
 # Remix Server Runtime for Deno
 
-[![JSR](https://jsr.io/badges/@fahchen/remix-deno-server-runtime)](https://jsr.io/@fahchen/remix-deno-server-runtime)
+[![JSR](https://jsr.io/badges/@byzanteam/remix-deno-server-runtime)](https://jsr.io/@byzanteam/remix-deno-server-runtime)
 
 This package implements the "Remix server runtime interface" that Remix runtime
 packages must conform to.
@@ -14,14 +14,14 @@ packages must conform to.
 Install the package:
 
 ```
-deno install jsr:@fahchen/remix-deno-server-runtime
+deno install jsr:@byzanteam/remix-deno-server-runtime
 ```
 
 Build your Deno server:
 
 ```typescript
 import { type ServerBuild } from "@remix-run/server-runtime";
-import { createRequestHandlerWithStaticFiles } from "@fahchen/remix-deno-server-runtime";
+import { createRequestHandlerWithStaticFiles } from "@byzanteam/remix-deno-server-runtime";
 
 const handleRequest = createRequestHandlerWithStaticFiles({
   build: (await import("./build/server/index.js")) as ServerBuild,

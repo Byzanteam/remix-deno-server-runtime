@@ -1,5 +1,5 @@
 {
-  "name": "@fahchen/remix-deno-server-runtime",
+  "name": "@byzanteam/remix-deno-server-runtime",
   "version": "0.4.0",
   "exports": {
     ".": "./mod.ts",
