@@ -1,4 +1,4 @@
-import crypto from "node:crypto";
+import { crypto } from "@std/crypto";
 
 /**
  * 通过秘钥将内容加密
