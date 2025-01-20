@@ -1,9 +1,14 @@
 import {
+  type Cookie,
+  type CookieOptions,
+  type CookieParseOptions,
+  type CookieSerializeOptions,
   createCookieFactory,
   type CreateCookieFunction,
   type SignFunction,
   type UnsignFunction,
 } from "@remix-run/server-runtime";
+import { decryptData, encryptData } from "./crypto.ts";
 
 const encoder = new TextEncoder();
 
@@ -60,4 +65,43 @@ export const createCookie: CreateCookieFunction = createCookieFactory({
   sign,
   unsign,
 });
+
+/**
+ * 创建一个内容被加密的 cookie
+ * @example
+ * const key = await generateKey(pwd)
+ * const encryptedCookie = createEncryptedCookie("my-cookie-name", key)
+ * const headers = new Headers({
+ *   "Set-Cookie": await cookie.serialize(value)
+ * })
+ */
+export function createEncryptedCookie(
+  name: string,
+  key: CryptoKey,
+  options?: CookieOptions,
+): Cookie {
+  const cookie = createCookie(name, options);
+
+  return {
+    ...cookie,
+    serialize: async (value: unknown, options?: CookieSerializeOptions) => {
+      return await cookie.serialize(
+        await encryptData(JSON.stringify(value), key),
+        options,
+      );
+    },
+    parse: async (value: string, options?: CookieParseOptions) => {
+      const { result, iv } = await cookie.parse(value, options);
+
+      const decryptedData = await decryptData(result, key, iv);
+
+      try {
+        return JSON.parse(decryptedData);
+      } catch {
+        return decryptedData;
+      }
+    },
+  };
+}
+
 export { isCookie } from "@remix-run/server-runtime";
