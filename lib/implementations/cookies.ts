@@ -91,9 +91,15 @@ export function createEncryptedCookie(
       );
     },
     parse: async (value: string, options?: CookieParseOptions) => {
-      const { result, iv } = await cookie.parse(value, options);
+      const parseResult = await cookie.parse(value, options);
 
-      const decryptedData = await decryptData(result, key, iv);
+      if (!parseResult) return parseResult;
+
+      const decryptedData = await decryptData(
+        parseResult.result,
+        key,
+        parseResult.iv,
+      );
 
       try {
         return JSON.parse(decryptedData);

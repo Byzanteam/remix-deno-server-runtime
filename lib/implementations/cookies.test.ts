@@ -34,4 +34,14 @@ describe("createEncryptedCookie", () => {
 
     assertEquals(cookieValue, "string");
   });
+
+  it("should return null while not have cookie", async () => {
+    const key = await generateKey("1234567890123456");
+
+    const cookie = createEncryptedCookie("name", key);
+
+    const cookieValue = await cookie.parse("");
+
+    assertEquals(cookieValue, null);
+  });
 });
