@@ -101,7 +101,9 @@ export async function serveStaticFiles(
     return new Response(file, { headers });
   } catch (error) {
     if (
-      (error as { code?: string }).code === "EISDIR" ||
+      ["EISDIR", "ENOENT"].includes(
+        (error as { code?: string }).code as string,
+      ) ||
       error instanceof Deno.errors.IsADirectory ||
       error instanceof Deno.errors.NotFound
     ) {
@@ -112,17 +114,15 @@ export async function serveStaticFiles(
   }
 }
 
-export function createRequestHandlerWithStaticFiles(
-  {
-    build,
-    mode,
-    getLoadContext,
-    staticFiles,
-  }: HandlerArguments & {
-    getLoadContext?: GetLoadContextFunction;
-    staticFiles?: ServeStaticFilesOptions;
-  },
-): RequestHandler {
+export function createRequestHandlerWithStaticFiles({
+  build,
+  mode,
+  getLoadContext,
+  staticFiles,
+}: HandlerArguments & {
+  getLoadContext?: GetLoadContextFunction;
+  staticFiles?: ServeStaticFilesOptions;
+}): RequestHandler {
   const remixHandler = createRequestHandler({ build, mode, getLoadContext });
 
   return async (request: Request) => {
