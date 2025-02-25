@@ -97,8 +97,14 @@ export async function serveStaticFiles(
   const filePath = joinPath(publicDir, url.pathname);
 
   try {
-    const file = await Deno.readFile(filePath);
-    return new Response(file, { headers });
+    const file = await Deno.open(filePath, { read: true });
+    const fileInfo = await file.stat();
+
+    if (fileInfo.isFile) {
+      return new Response(file.readable, { headers });
+    }
+
+    throw new FileNotFoundError(filePath);
   } catch (error) {
     if (
       ["EISDIR", "ENOENT"].includes(
