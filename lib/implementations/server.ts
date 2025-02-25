@@ -97,7 +97,7 @@ export async function serveStaticFiles(
   const filePath = joinPath(publicDir, url.pathname);
 
   try {
-    const file = await Deno.open(joinPath(filePath), { read: true });
+    const file = await Deno.open(filePath, { read: true });
     const fileInfo = await file.stat();
 
     if (fileInfo.isFile) {
