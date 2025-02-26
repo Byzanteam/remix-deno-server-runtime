@@ -70,6 +70,7 @@ function getContentTypeOfURL(url: URL): string | undefined {
 export async function serveStaticFiles(
   request: Request,
   options: ServeStaticFilesOptions = {},
+  basename?: string,
 ): Promise<Response> {
   const {
     cacheControl,
@@ -94,7 +95,16 @@ export async function serveStaticFiles(
     headers.set("Cache-Control", defaultCacheControl(url, assetsPublicPath));
   }
 
-  const filePath = joinPath(publicDir, url.pathname);
+  if (basename && !url.pathname.startsWith(basename)) {
+    throw new FileNotFoundError("not assets request");
+  }
+
+  const filePath = joinPath(
+    publicDir,
+    basename
+      ? url.pathname.replace(new RegExp(`^${basename}`), "")
+      : url.pathname,
+  );
 
   try {
     const file = await Deno.open(filePath, { read: true });
@@ -120,7 +130,7 @@ export async function serveStaticFiles(
   }
 }
 
-export function createRequestHandlerWithStaticFiles({
+export async function createRequestHandlerWithStaticFiles({
   build,
   mode,
   getLoadContext,
@@ -128,12 +138,17 @@ export function createRequestHandlerWithStaticFiles({
 }: HandlerArguments & {
   getLoadContext?: GetLoadContextFunction;
   staticFiles?: ServeStaticFilesOptions;
-}): RequestHandler {
-  const remixHandler = createRequestHandler({ build, mode, getLoadContext });
+}): Promise<RequestHandler> {
+  const serverBuild = typeof build === "function" ? await build() : build;
+  const remixHandler = createRequestHandler({
+    build: serverBuild,
+    mode,
+    getLoadContext,
+  });
 
   return async (request: Request) => {
     try {
-      return await serveStaticFiles(request, staticFiles);
+      return await serveStaticFiles(request, staticFiles, serverBuild.basename);
     } catch (error: unknown) {
       if (!(error instanceof FileNotFoundError)) {
         throw error;

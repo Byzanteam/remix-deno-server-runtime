@@ -1,6 +1,6 @@
 {
   "name": "@byzanteam/remix-deno-server-runtime",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "exports": {
     ".": "./mod.ts",
     "./sessions/denoKVStorage": "./lib/implementations/sessions/denoKVStorage.ts"
