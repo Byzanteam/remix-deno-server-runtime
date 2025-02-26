@@ -70,6 +70,7 @@ function getContentTypeOfURL(url: URL): string | undefined {
 export async function serveStaticFiles(
   request: Request,
   options: ServeStaticFilesOptions = {},
+  basename: string = "/",
 ): Promise<Response> {
   const {
     cacheControl,
@@ -94,7 +95,10 @@ export async function serveStaticFiles(
     headers.set("Cache-Control", defaultCacheControl(url, assetsPublicPath));
   }
 
-  const filePath = joinPath(publicDir, url.pathname);
+  const filePath = joinPath(
+    publicDir,
+    url.pathname.replace(new RegExp(`^${basename}`), ""),
+  );
 
   try {
     const file = await Deno.open(filePath, { read: true });
@@ -132,8 +136,10 @@ export function createRequestHandlerWithStaticFiles({
   const remixHandler = createRequestHandler({ build, mode, getLoadContext });
 
   return async (request: Request) => {
+    const buildConfig = typeof build === "function" ? await build() : build;
+
     try {
-      return await serveStaticFiles(request, staticFiles);
+      return await serveStaticFiles(request, staticFiles, buildConfig.basename);
     } catch (error: unknown) {
       if (!(error instanceof FileNotFoundError)) {
         throw error;
