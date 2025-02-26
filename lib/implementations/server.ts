@@ -95,11 +95,13 @@ export async function serveStaticFiles(
     headers.set("Cache-Control", defaultCacheControl(url, assetsPublicPath));
   }
 
+  if (basename && !url.pathname.startsWith(basename)) {
+    throw new FileNotFoundError("not assets request");
+  }
+
   const filePath = joinPath(
     publicDir,
-    basename && url.pathname.startsWith(basename)
-      ? url.pathname.replace(new RegExp(`^${basename}`), "")
-      : url.pathname,
+    url.pathname.replace(new RegExp(`^${basename}`), ""),
   );
 
   try {
