@@ -101,7 +101,9 @@ export async function serveStaticFiles(
 
   const filePath = joinPath(
     publicDir,
-    url.pathname.replace(new RegExp(`^${basename}`), ""),
+    basename
+      ? url.pathname.replace(new RegExp(`^${basename}`), "")
+      : url.pathname,
   );
 
   try {
