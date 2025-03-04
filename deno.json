@@ -1,12 +1,14 @@
 {
   "name": "@byzanteam/remix-deno-server-runtime",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "exports": {
     ".": "./mod.ts",
     "./sessions/denoKVStorage": "./lib/implementations/sessions/denoKVStorage.ts"
   },
   "publish": {
-    "exclude": [".github"]
+    "exclude": [
+      ".github"
+    ]
   },
   "tasks": {
     "lint": "deno fmt --check && deno lint && deno check **/*.ts",

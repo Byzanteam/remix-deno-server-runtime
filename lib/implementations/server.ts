@@ -52,8 +52,16 @@ class FileNotFoundError extends Error {
   }
 }
 
-function defaultCacheControl(url: URL, assetsPublicPath: string): string {
-  if (url.pathname.startsWith(assetsPublicPath)) {
+function defaultCacheControl(
+  url: URL,
+  assetsPublicPath: string,
+  basename?: string,
+): string {
+  const publicPath = basename
+    ? joinPath(basename, assetsPublicPath)
+    : assetsPublicPath;
+
+  if (url.pathname.startsWith(publicPath)) {
     return "public, max-age=31536000, immutable";
   } else {
     return "public, max-age=600";
@@ -92,7 +100,10 @@ export async function serveStaticFiles(
   } else if (cacheControl) {
     headers.set("Cache-Control", cacheControl);
   } else if (assetsPublicPath) {
-    headers.set("Cache-Control", defaultCacheControl(url, assetsPublicPath));
+    headers.set(
+      "Cache-Control",
+      defaultCacheControl(url, assetsPublicPath, basename),
+    );
   }
 
   if (basename && !url.pathname.startsWith(basename)) {
